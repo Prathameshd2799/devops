@@ -1,0 +1,30 @@
+---
+- name: install jenkins on linux
+  hosts: jenkins-master
+  become: true
+  tasks: 
+    - name: install java 17
+      yum: 
+        name: java-17-amazon-corretto
+        state: present
+    - name: jenkins repository
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    - name: import key
+      command: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    - name: install jenkins
+      yum: 
+        name: jenkins
+        state: present
+    - name: jenkins start
+      systemmd:  
+        name: jenkins
+        enabled: yes
+        state: started
+    - name: start jenkins after ec2 restarting
+      service:
+        name: jenkins
+        enabled: yes
+           
+   
