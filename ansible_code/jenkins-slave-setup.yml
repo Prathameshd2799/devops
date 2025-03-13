@@ -16,3 +16,16 @@
         src: /opt/apache-maven-3.9.9-bin.tar.gz
         dest: /opt
         remote_src: yes
+    - name: install git
+      yum:
+        name: git
+        state: present
+      tags: install_git
+    - name: check git version
+      shell: git --version
+      tags: install_git
+      register: git_version
+    - name: print git version
+      debug: 
+        msg: "{{ git_version.stdout }}"
+      tags: install_git
