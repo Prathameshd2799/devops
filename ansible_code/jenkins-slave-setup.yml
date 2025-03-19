@@ -37,3 +37,19 @@
       service:
         name: docker
         state: started
+    - name: check docker version
+      shell: docker --version
+      register: docker_version
+    
+    - name: print docker version
+      debug:
+      msg: "{{ docker_version.stdout }}"
+      ignore_errors: yes
+
+    - name: Verify Docker service status explicitly
+      command: systemctl is-active docker
+      register: docker_status
+
+    - name: Display Docker service status
+      debug:
+        msg: "Docker service is {{ docker_status.stdout }}"
