@@ -75,4 +75,33 @@
     - name: Display kubectl version
       debug:
         msg: "{{ kubectl_version.stdout }}"
+    - name: Ensure required packages are installed
+      yum:
+        name:
+          - unzip
+        state: present
+
+    - name: Download the AWS CLI v2 installer
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: /tmp/awscliv2.zip
+
+    - name: Unzip the AWS CLI installer
+      unarchive:
+        src: /tmp/awscliv2.zip
+        dest: /tmp
+        remote_src: yes
+
+    - name: Run the AWS CLI installer
+      command: /tmp/aws/install --update
+
+
+    - name: Verify AWS CLI installation
+      command: /usr/local/bin/aws --version
+      register: aws_version
+
+    - name: Display AWS CLI version
+      debug:
+        msg: "Installed AWS CLI version: {{ aws_version.stdout }}"
+    
     
