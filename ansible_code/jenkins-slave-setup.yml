@@ -52,3 +52,12 @@
     - name: Display Docker service status
       debug:
         msg: "Docker service is {{ docker_status.stdout }}"
+    - name: give 777 permissions on /var/run/docker.sock
+      file: 
+        path: /var/run/docker.sock
+        state: file 
+        mode: 0777
+    - name: start docker on boot time 
+      service: 
+        name: docker 
+        enabled: yes 
